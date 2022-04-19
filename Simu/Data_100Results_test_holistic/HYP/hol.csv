@@ -1,0 +1,9 @@
+eta,update_period,exponential_update,weight_f,cost_f,r2
+0.1,2000,True,<function soft_max at 0x7f8b31c630d0>,<function pearson_correlation at 0x7f8b31a823a0>,0.0007200847274665412
+0.1,2000,False,<function soft_max at 0x7f8b31c630d0>,<function pearson_correlation at 0x7f8b31a823a0>,0.0007199792360259583
+0.1,2000,True,<function <lambda> at 0x7f8b31c65280>,<function pearson_correlation at 0x7f8b31a823a0>,0.0007148314423690572
+0.1,2000,False,<function <lambda> at 0x7f8b31c65280>,<function pearson_correlation at 0x7f8b31a823a0>,0.0007147394399381612
+0.1,2000,False,<function soft_max at 0x7f8b31c630d0>,<function avg_squared_arctan at 0x7f8b2012aee0>,0.0007082793770246676
+0.1,2000,True,<function soft_max at 0x7f8b31c630d0>,<function avg_squared_arctan at 0x7f8b2012aee0>,0.0007082776636059274
+0.1,2000,False,<function <lambda> at 0x7f8b31c65280>,<function avg_squared_arctan at 0x7f8b2012aee0>,0.0007041165025536422
+0.1,2000,True,<function <lambda> at 0x7f8b31c65280>,<function avg_squared_arctan at 0x7f8b2012aee0>,0.0007041127725820884
