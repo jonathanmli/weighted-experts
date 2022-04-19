@@ -18,10 +18,6 @@ class file_manager:
         if not os.path.exists(path):
             os.makedirs(path)
     
-    # def write_results_dir(self, name):
-    #     path = self.results_path + name + '/'
-    #     self.write_dir(path)
-
     def df_to_csv(self, df, folder, name):
         path = self.results_path + folder + '/'
         self.write_dir(path)

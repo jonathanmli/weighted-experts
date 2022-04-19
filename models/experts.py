@@ -16,8 +16,6 @@ def pearson_correlation(yhat,y):
     # note that yhat and y must have at least 2 elements
     # pearson correlation is related to cosine similarity
 
-    # print("yhat", yhat)
-    # print("y", y)
     return -np.corrcoef(yhat,y)[0,1]
 
 def soft_max(w):
@@ -75,16 +73,10 @@ class HistoryLog:
 
     def add_data(self, X, y):
         # make sure shapes are compatible
-        # if X.shape[1] != y.shape[0]:
-        #     raise Exception('Shapes do not match')
         if self.X is None and self.y is None:
             self.X = X
             self.y = y
         else:
-            # print(self.X.shape)
-            # print(X.shape)
-            # print(type(self.X))
-            # print(type(X))
             self.X = np.vstack((self.X, X))
             self.y = np.vstack((self.y, y))
         
@@ -144,10 +136,6 @@ class WeightedExpert(Expert):
         self.set_history(history)
         self.update()
         
-        
-
-        # maintains combined history for all of its sub experts?
-        # note: add replay buffer
 
     def set_history(self, his):
         self.history = his
@@ -163,12 +151,6 @@ class WeightedExpert(Expert):
     def update(self, history=None):
         for _ in self.experts:
             _.update()
-        # self.update_counter += 1
-        # if self.update_counter % self.update_period == 0:
-        #     for _ in self.experts:
-        #         _.update()
-        #     self.update_counter = 0
-        #     self.history.get_X()
         
 
 
@@ -179,11 +161,7 @@ class WeightedExpert(Expert):
         # print("howdy")
         costs_expert = np.zeros(len(self.experts))
         for i in range(len(self.experts)):
-            # print(i)
             costs_expert[i] = self.cost_f(z[:,i], y.reshape(-1))
-        # print('ex preds', z)
-        # print('true', y)
-        # print('costse', costs_expert)
 
         # update weights
         if self.exponential_update:
@@ -195,7 +173,6 @@ class WeightedExpert(Expert):
             for i in range(len(self.experts)):
                 self.weights[i] *= 1 - self.eta * costs_expert[i]
 
-        # print('d')
 
     def get_predictions(self, x):
         '''
@@ -205,7 +182,6 @@ class WeightedExpert(Expert):
         out = np.zeros((len(x),len(self.experts)))
         for i in range(len(self.experts)):
             out[:,i] = self.experts[i].predict(x)
-        # print("experts", out)
         return out
 
     def predict(self, x, y=None, update_experts = True):
@@ -256,9 +232,7 @@ class SingleFactorOLS(Expert):
         self.factor = factor
         Expert.__init__(self, history)
 
-    def predict(self, x):
-        # print(type(x[self.factor]))
-    
+    def predict(self, x):    
         if len(x.shape) == 1:
             return self.beta * x[self.factor]+ self.alpha
         else:
@@ -268,13 +242,9 @@ class SingleFactorOLS(Expert):
 
     #this takes the longest
     def update(self):
-        # print(self.factor, self.history.get_X()[:, self.factor].reshape(-1, 1))
-        # print(self.history.get_y())
         reg = LinearRegression().fit(self.history.get_X()[:, self.factor].reshape(-1, 1), self.history.get_y())
         self.beta = reg.coef_[0].item()
         self.alpha = reg.intercept_.item()
-        # print(type(self.alpha))
-        # print(type(self.beta))
 
 class SingleFactorCorr(Expert):
 
@@ -285,19 +255,12 @@ class SingleFactorCorr(Expert):
         Expert.__init__(self, history)
 
     def predict(self, x):
-        # print(type(x[self.factor]))
         return self.beta * x[self.factor]+ self.alpha
-            #
-        #float(
 
     #this takes the longest
     def update(self):
-        # print(self.factor, self.history.get_X()[:, self.factor].reshape(-1, 1))
-        # print(self.history.get_y())
         reg = LinearRegression().fit(self.history.get_X()[:, self.factor].reshape(-1, 1), self.history.get_y())
         self.beta = reg.coef_[0].item()
         self.alpha = reg.intercept_.item()
-        # print(type(self.alpha))
-        # print(type(self.beta))
 
 

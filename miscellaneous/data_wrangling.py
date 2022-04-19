@@ -17,12 +17,6 @@ def summarize_results(results):
         if results[i]['model'] == 'weighted experts':
             we_results = results[i]
 
-        # print(results[i]['r2_is'].shape)
-        # print(results[i]['r2_is'])
-        # print(np.array(results[i]['r2_is']).shape)
-        # print(results[i]['r2_oos'].shape)
-        # print(results[i]['vip'].shape)
-
         npout[i] = np.concatenate((np.array(results[i]['r2_is']).reshape(1), np.array(results[i]['r2_oos']).reshape(1), results[i]['vip']), axis = 0)
 
     pdout = pd.DataFrame(npout, columns=["r2_is", "r2_oos"] + ["vip"]*n_explanatory)
@@ -121,64 +115,3 @@ def data_wrangle(X, y):
     out['ytrain_demean'] = ytrain_demean
     return out
 
-    N = 200  ### Number of CS tickers
-    m = nump * 2  ### Number of Characteristics
-    T = 180  ### Number of Time Periods
-
-    per = np.tile(np.arange(N) + 1, T)
-    time = np.repeat(np.arange(T) + 1, N)
-    stdv = 0.05
-    theta_w = 0.005
-
-    c = pd.read_csv(dirstock + 'c%d.csv' % M, delimiter=',').values
-    r1 = pd.read_csv(dirstock + 'r%d_%d_%d.csv' % (mo, M, hh),
-                        delimiter=',').iloc[:, 0].values
-
-    ### Add Some Elements ###
-    daylen = np.repeat(N, T / 3)
-    daylen_test = daylen
-    ind = range(0, (N * T // 3))
-    xtrain = c[ind, :]
-    ytrain = r1[ind]
-    ytrain = ytrain.reshape(len(ytrain), 1)
-    trainper = per[ind]
-    ind = range((N * T // 3), (N * (T * 2 // 3 - hh + 1)))
-    xtest = c[ind, :]
-    ytest = r1[ind]
-    ytest = ytest.reshape(len(ytest), 1)
-    testper = per[ind]
-
-    l1 = c.shape[0]
-    l2 = len(r1)
-    l3 = l2 - np.sum(np.isnan(r1))
-    print(l1, l2, l3)
-    ind = range((N * T * 2 // 3), min(l1, l2, l3))
-    xoos = c[ind, :]
-    yoos = r1[ind]
-    yoos = yoos.reshape(len(yoos), 1)
-
-    del c
-    del r1
-
-    ### Demean Returns ###
-    ytrain_demean = ytrain - np.mean(ytrain)
-    ytest_demean = ytest - np.mean(ytest)
-    mtrain = np.mean(ytrain)
-    mtest = np.mean(ytest)
-
-    ### Calculate Sufficient Stats ###
-    sd = np.zeros(xtrain.shape[1])
-    for i in range(xtrain.shape[1]):
-        s = np.std(xtrain[:, i])
-        if s > 0:
-            xtrain[:, i] = xtrain[:, i] / s
-            xtest[:, i] = xtest[:, i] / s
-            xoos[:, i] = xoos[:, i] / s
-            sd[i] = s
-
-    XX = xtrain.T.dot(xtrain)
-    b = np.linalg.svd(XX)
-    L = b[1][0]
-    print('Lasso L=', L)
-    Y = np.matrix(ytrain_demean)
-    XY = xtrain.T.dot(Y)
