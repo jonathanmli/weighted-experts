@@ -77,7 +77,3 @@ def test_WeightedExpert2():
     preds = we.predict_from_history(6,9)
     print(preds)
     print(we.weights)
-
-
-if __name__ == '__main__':
-    test_WeightedExpert2()

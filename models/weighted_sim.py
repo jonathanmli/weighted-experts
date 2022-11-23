@@ -8,7 +8,6 @@ def weighted_alg(we : WeightedExpert, start: int, end: int, mtrain=0.0, update_p
     '''
     T = end-start
     out = {}
-    # print("ps", T // update_period)
     out['wot'] = np.zeros((T // update_period, len(we.weights)))
     out['rot'] = np.zeros(T // update_period)
     out['preds'] =  np.zeros(T)
@@ -23,10 +22,6 @@ def weighted_alg(we : WeightedExpert, start: int, end: int, mtrain=0.0, update_p
         out['wot'][i, :] = we.weights
         ys = we.history.get_y(j, j+update_period)
         r_chosen = np.sum(np.power(preds - ys, 2))
-        # print("preds", preds)
-        # print("ys", ys)
-        # print("r_chosen", r_chosen)
-        # print("null", np.sum(np.power(ys - mtrain, 2)))
         out['rot'][i] = 1 - r_chosen / np.sum(np.power(ys - mtrain, 2))
         r_chosen_sum += r_chosen
     
@@ -104,14 +99,7 @@ def weighted_simulation(experts, xtrain, xtest, xoos, ytrain, ytest, yoos,
     df_hyps['r2'] = rs
     df_hyps.sort_values(by='r2', inplace=True, ascending=False)
     print(df_hyps)
-    # print(combs)
-    # print(rs)
 
-    # # use tuned hyperparameters on test
-    # his.current_end = len(xtrain) + len(xtest)
-    # we = WeightedExpert(experts, his, weights = training_results['weights'], **combs[maxi])
-    # test_results = weighted_alg(we,len(xtrain), len(xtrain) + len(xtest),mtrain=mtrain, **combs[maxi])
-    # print('r2is', test_results['r2'])
 
     # use tuned hyperparameters on OOS
     his.current_end = len(xtrain) + len(xtest) + len(xoos)

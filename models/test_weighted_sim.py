@@ -60,11 +60,8 @@ def test_weighted_alg2():
     we.update()
     H.add_data(X1,Y1)
     H.add_data(X1,Y1)
-    # H.set_end 
     
     results = weighted_alg(we, 4, 8, update_period=2, mtrain=np.mean(Y1))
-    # for _ in results:
-    #     print(results[_])
     print('preds', results['preds'])
     print('wot', results['wot'])
     print('rot', results['rot'])
